@@ -1,0 +1,16 @@
+server:
+  listen: 5173
+  workers: 4
+
+  upstreams:
+    - id : upstream1
+      url : jsonplaceholder.typicode.com 
+
+  rules:
+    
+    - path : /todos
+      upstreams:
+        - upstream1
+
+
+        
