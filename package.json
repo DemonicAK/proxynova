@@ -1,10 +1,14 @@
 {
   "name": "proxynova",
   "version": "1.0.0",
-  "description": "Reverse Proxy Server",
-  "main": "index.js",
+  "description": "A scalable HTTP proxy server inspired by NGINX",
+  "main": "dist/index.js",
   "author": "Arijit Kar",
   "license": "MIT",
+    "bin": {
+    "proxynova": "dist/index.js"
+  },
+    "keywords": ["proxy", "server", "nodejs", "load-balancer"],
   "scripts": {
     "start": "node dist/index --config config.yaml",
     "build": "tsc -p .",

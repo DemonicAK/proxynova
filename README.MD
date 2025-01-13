@@ -19,8 +19,8 @@ ProxyNova is a lightweight, scalable HTTP proxy server built with Node.js and Ty
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/DemonicAK/proxynova.git
+   cd proxynova
    ```
 
 2. Install dependencies:
@@ -39,15 +39,24 @@ The server is configured using a YAML file specifying server rules and upstream 
 server:
   listen: 3000
   workers: 4
-  rules:
-    - path: "/api"
-      upstreams: ["service1", "service2"]
+  headers:
+    - key: "Content-Type"
+      value: "application/json"
+    - key: "Cache-Control"
+      value: "no-cache"
   upstreams:
     - id: "service1"
       url: "http://localhost:4000"
     - id: "service2"
       url: "http://localhost:5000"
+  rules:
+    - path: "/api"
+      upstreams: ["service1", "service2"]
+    - path: "/auth"
+      upstreams: ["service1"]
+
 ```
+
 
 ## Running the Server
 
