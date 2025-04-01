@@ -1,16 +1,26 @@
 server:
-  listen: 5173
+  listen: 8080
   workers: 4
 
   upstreams:
-    - id : upstream1
-      url : jsonplaceholder.typicode.com 
+    - id: upstream1
+      url: jsonplaceholder.typicode.com
+
+    - id: upstream2
+      url: dummyjson.com
+
+  headers:
+    - key: "x-forward-for"
+      value: "$ip"
+
+    - key: "Authorization"
+      value: "Bearer xyz"
 
   rules:
-    
-    - path : /todos
+    - path: /test
+      upstreams:
+        - upstream2
+
+    - path: /
       upstreams:
         - upstream1
-
-
-        

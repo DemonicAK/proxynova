@@ -1,28 +1,27 @@
-const { program } = require("commander");
-import { validateConfig,parseYAMLConfig } from './config'
-import { createServer } from './server'
-import os from 'os'
-async function main(){
-    program
-  .option('--config <path>', 'path to config file')
+import { program } from "commander";
+import { parseYAMLConfig, validateConfig } from "./config";
+import { createServer } from "./server";
+import os from "node:os";
 
+async function main() {
+  program.option("--config <path>");
+  program.parse();
 
-program.parse();
+  const options = program.opts();
 
-const options = program.opts();
-const path = program.args[0];
-// console.log("path:",options);
+  if (!options || ("config" in options && !options.config)) {
+    throw new Error("No config file provided");
+  }
 
-if( options && 'config' in options ){
-    const config = await parseYAMLConfig(options.config);
-    const validatedConfig = await validateConfig(config);
-    // console.log("validatedConfig:",validatedConfig);
-    createServer({
-      port: validatedConfig.server.listen,
-      workerCount: validatedConfig.server.workers || os .cpus().length,
-      config: validatedConfig,
-    });
+  const validatedConfig = await validateConfig(
+    await parseYAMLConfig(options.config),
+  );
+
+  const port = validatedConfig.server.listen;
+  const workerCount = validatedConfig.server.workers ?? os.cpus().length;
+  const config = validatedConfig;
+
+  await createServer({ port, workerCount, config });
 }
-}
 
-main()
+main();

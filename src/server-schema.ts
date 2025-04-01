@@ -1,16 +1,17 @@
-import {z} from 'zod';
+import { z } from "zod";
 
-export const WorkerMessageSchema = z.object({
-    requestType: z.enum(['HTTP','HTTPS']),
-    header: z.any().optional(),
-    body: z.any(),
-    url: z.string(),
-})
-export const WorkerMessageReplySchema = z.object({
-    data: z.string().optional(),
-    error: z.string().optional(),
-    errorCode: z.enum(['404','500','400']).optional(),
-})
+export const workerMessageSchema = z.object({
+  requestType: z.enum(["HTTP"]),
+  headers: z.any(),
+  body: z.any(),
+  url: z.string(),
+});
 
-export type WorkerMessageReplyType = z.infer<typeof WorkerMessageReplySchema>;
-export type WorkerMessageType = z.infer<typeof WorkerMessageSchema>;
+export const workerMessageReplySchema = z.object({
+  data: z.string().optional(),
+  error: z.string().optional(),
+  errorCode: z.enum(["500", "404"]).optional(),
+});
+
+export type WorkerMessageType = z.infer<typeof workerMessageSchema>;
+export type WorkerMessageReplyType = z.infer<typeof workerMessageReplySchema>;

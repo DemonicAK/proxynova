@@ -1,50 +1,25 @@
 {
-  "name": "@karindustries/proxynova",
+  "name": "noob-reverse-proxy",
   "version": "1.0.0",
-  "description": "A scalable HTTP proxy server inspired by NGINX",
-  "keywords": [
-    "proxy",
-    "server",
-    "nodejs",
-    "load-balancer"
-  ],
-  "homepage": "https://github.com/DemonicAK/proxynova#readme",
-  "bugs": {
-    "url": "https://github.com/DemonicAK/proxynova/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DemonicAK/proxynova.git"
-  },
-  "license": "MIT",
-  "author": "Arijit Kar",
-  "type": "commonjs",
-  "main": "dist/index.js",
-  "bin": {
-    "proxynova": "dist/index.js"
-  },
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js --config config.yaml",
-    "build": "babel src --out-dir dist --extensions \".ts\"",
-    "dev": "tsc-watch --onSuccess \"npm start\"",
-    "prepublishOnly": "npm run build"
+    "start": "node dist/index --config config.yaml",
+    "build": "tsc -p .",
+    "dev": "tsc-watch --onSuccess \"npm start\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "express": "^4.21.2",
+    "tsc-watch": "^6.2.1"
   },
   "dependencies": {
     "commander": "^12.1.0",
     "yaml": "^2.6.1",
     "zod": "^3.24.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.26.4",
-    "@babel/core": "^7.26.0",
-    "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
-    "@babel/runtime": "^7.26.0",
-    "@types/node": "^22.10.2",
-    "babel-loader": "^9.2.1",
-    "tsc-watch": "^6.2.1",
-    "typescript": "^5.7.2"
   }
 }
