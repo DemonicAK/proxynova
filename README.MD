@@ -1,112 +1,110 @@
 # ProxyNova
 
-ProxyNova is a lightweight, scalable HTTP proxy server built with Node.js and TypeScript, inspired by NGINX. This project uses clustering and worker processes to distribute incoming HTTP requests efficiently.
+ProxyNova is a lightweight HTTP proxy server built with Node.js and TypeScript. It provides a simple yet powerful way to route HTTP requests to different upstream servers based on configurable rules.
 
 ## Features
 
-- Load balancing across worker processes
-- Dynamic request routing based on configuration rules
-- Configurable upstream servers for proxying requests
-- Easy-to-extend architecture
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
+- **Simple Configuration**: YAML-based configuration for easy setup
+- **Clustering Support**: Uses Node.js clustering to distribute load across multiple worker processes
+- **Dynamic Routing**: Route requests to different upstream servers based on path patterns
+- **Header Management**: Add custom headers to proxied requests
+- **Mock Server**: Includes a configurable mock server for testing
 
 ## Installation
 
-1. Clone the repository:
+```bash
+# Clone the repository
+git clone https://github.com/DemonicAK/proxynova.git
+cd proxynova
 
-   ```bash
-   git clone https://github.com/DemonicAK/proxynova.git
-   cd proxynova
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+# Install dependencies
+npm install
+# or if using pnpm
+pnpm install
+```
 
 ## Configuration
 
-The server is configured using a YAML file specifying server rules and upstream servers. Example `config.yaml`:
+ProxyNova uses YAML configuration files. Here's a basic example:
 
 ```yaml
 server:
-  listen: 3000
-  workers: 4
-  headers:
-    - key: "Content-Type"
-      value: "application/json"
-    - key: "Cache-Control"
-      value: "no-cache"
-  upstreams:
-    - id: "service1"
-      url: "http://localhost:4000"
-    - id: "service2"
-      url: "http://localhost:5000"
-  rules:
-    - path: "/api"
-      upstreams: ["service1", "service2"]
-    - path: "/auth"
-      upstreams: ["service1"]
+  listen: 8080           # Port to listen on
+  workers: 4             # Number of worker processes
 
+  upstreams:             # Define upstream servers
+    - id: upstream1
+      url: example.com
+    - id: upstream2
+      url: api.example.com
+
+  headers:               # Custom headers to add
+    - key: "x-forward-for"
+      value: "$ip"
+    - key: "Authorization"
+      value: "Bearer xyz"
+
+  rules:                 # Routing rules
+    - path: /api
+      upstreams:
+        - upstream2
+    - path: /
+      upstreams:
+        - upstream1
 ```
 
+## Usage
 
-## Running the Server
+### Build the project
 
 ```bash
-npm run build  # Compile TypeScript files
-node dist/index.js --config path/to/config.yaml
+npm run build
 ```
 
-The server will start on the specified port with the configured number of workers.
+### Start the proxy server
+
+```bash
+npm start
+```
+
+### Development mode (with auto-reload)
+
+```bash
+npm run dev
+```
+
+### Running the mock server for testing
+
+The project includes a mock server for testing without external services:
+
+```bash
+node dist/mock-server.js --config mock-server-config.yaml
+```
 
 ## Project Structure
 
 ```
-├── src
-│   ├── config-schema.ts      # Schema for configuration validation
-│   ├── server-schema.ts      # Schema for inter-process messaging
-│   ├── config.ts             # Configuration parser and validator
-│   ├── server.ts             # Main server logic with clustering
-│   └── index.ts              # Entry point for the server
-├── config.yaml               # Example configuration file
+├── config.yaml               # Main proxy configuration
+├── mock-server-config.yaml   # Mock server configuration
+├── src/
+│   ├── config-schema.ts      # Zod schema for config validation
+│   ├── config.ts             # Configuration loader and parser
+│   ├── index.ts              # Main entry point
+│   ├── mock-server.ts        # Test server implementation
+│   ├── server-schema.ts      # Schema for server messages
+│   └── server.ts             # Proxy server implementation
 ├── package.json
-├── tsconfig.json
-└── README.md
+└── tsconfig.json
 ```
 
-## Commands
+## Development
 
-- **Build the project:**
-
-  ```bash
-  npm run build
-  ```
-
-- **Start the server:**
-
-  ```bash
-  node dist/index.js --config path/to/config.yaml
-  ```
-
-## Future Enhancements
-
-- HTTPS support
-- Dynamic configuration reload without downtime
-- Advanced load-balancing strategies (Round Robin, Least Connections)
+This project uses:
+- TypeScript for type safety
+- Zod for configuration validation
+- Express for the mock server implementation
+- Commander for CLI argument parsing
 
 ## License
 
-- Dynamic configuration reload without downtime
-- Advanced load-balancing strategies (Round Robin, Least Connections)
-
-## **License**
-
-This project is licensed under the MIT License.
+ISC License
